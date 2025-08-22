@@ -28,18 +28,19 @@ export const RegisterUser = async (req, res) => {
       password: passwordHash,
     });
 
-    if (!user) {
-      return res.status(400).json({ message: "Invalid user data" });
-    }
+    
 
-    // ✅ Send token + user data
-    const token = genereateToken(user._id);
-    return res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      token,
+ 
+    let token = genereateToken(user._id);
+    console.log(token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+    await user.save();
+    return res.status(201).json(user);
 
   } catch (error) {
     console.error("RegisterUser error:", error.message);

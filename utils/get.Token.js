@@ -5,11 +5,7 @@ import jwt from "jsonwebtoken"
 
 
 export const genereateToken=(res,userId)=>{
+    console.log("gern token is calling")
     const token=jwt.sign({id:userId},process.env.JWT_SECRET,{expiresIn:"1d"},)
-    res.cookie("jwt",token,{
-        httpOnly:true,
-        secure:false,
-        sameSite:"Strict",
-        maxAge:24*60*60*1000
-    })
+     return token;
 }
